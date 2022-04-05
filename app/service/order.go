@@ -28,6 +28,10 @@ func (srv *defaultService) CreateOrder(req *dto.OrderRequest) error {
 	return nil
 }
 
+func (srv *defaultService) ProcessOrder(req *dto.OrderProcessRequest) error {
+	return nil
+}
+
 func (srv *defaultService) GetOrderDetail(code string) (oderData *dto.OrderData, err error) {
 	return
 }
