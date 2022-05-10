@@ -15,8 +15,7 @@ func devEnv() {
 
 }
 
-func init() {
-	devEnv()
+func InitConfig() {
 	app = appConfig{Mongo: Mongo{}}
 	bindingFromEnv(&app)
 }

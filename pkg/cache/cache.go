@@ -5,18 +5,19 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/go-redis/redis"
+	"order/pkg/configs"
 	"sync"
 	"time"
 )
 
 const (
 	redisKeyFormat = "%v:%v"
+	prefix         = "tinder"
 )
 
 type ProcessData func(data interface{}) error
 
 type Adapter interface {
-	WithContext(ctx context.Context) Adapter
 	Get(key string, v interface{}) error
 	Set(key string, v interface{}, expiration time.Duration) error
 	SetWithFunc(key string, v interface{}, expiration time.Duration, validate ProcessData) error
@@ -29,17 +30,26 @@ type RedisCache struct {
 	prefix string
 }
 
-func NewRedisAdapter(client *redis.Client, prefix string) Adapter {
-	return &RedisCache{
+var adapter Adapter
+
+func InitRedisClient() {
+	client := redis.NewClient(&redis.Options{
+		Addr:     configs.RedisURL(),
+		Password: configs.RedisPassword(),
+		DB:       0,
+	})
+	if _, err := client.Ping().Result(); err != nil {
+		panic(fmt.Sprintf("Cannot connect redis client: %s", err.Error()))
+	}
+	adapter = &RedisCache{
 		client: client,
 		prefix: prefix,
-		lock: sync.Mutex{},
+		lock:   sync.Mutex{},
 	}
 }
 
-func (rc *RedisCache) WithContext(ctx context.Context) Adapter {
-	rc.ctx = ctx
-	return rc
+func Instance() Adapter {
+	return adapter
 }
 
 func (rc *RedisCache) Get(key string, v interface{}) error {

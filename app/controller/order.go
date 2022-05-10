@@ -14,24 +14,24 @@ type orderController struct {
 	}
 }
 
-func CreateOrder(ctx *gin.Context) {
+func Create(ctx *gin.Context) {
 	var req dto.OrderRequest
 	if err := ctx.Bind(&req); err != nil {
 
 	}
-	err := orderCtrl.service.CreateOrder(&req)
+	err := orderCtrl.service.Create(&req)
 	if err != nil {
 		handleErr(ctx, &errors.ErrorMeta{HttpCode: 400}, "create-order")
 	}
 	success(ctx, &BaseResponse{Meta{Code: "201", Message: "create order successful"}, nil})
 }
 
-func GetOrder(ctx *gin.Context) {
+func GetDetail(ctx *gin.Context) {
 	code := ctx.Param("code")
 	if code == "" {
 
 	}
-	orderData, err := orderCtrl.service.GetOrderDetail(code)
+	orderData, err := orderCtrl.service.GetDetail(code)
 	if err != nil {
 
 	}

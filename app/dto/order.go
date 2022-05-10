@@ -1,5 +1,7 @@
 package dto
 
+type OrderStatus int
+
 type OrderRequest struct {
 	Items       []OrderItem `json:"items"`
 	CustomerId  string      `json:"customer_id"`
@@ -12,8 +14,6 @@ type OrderProcessRequest struct {
 	Status    OrderStatus   `json:"status"`
 	TimeStamp uint
 }
-
-type OrderStatus int
 
 type OrderItem struct {
 	ItemCode string `json:"item_code"`

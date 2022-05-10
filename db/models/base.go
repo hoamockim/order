@@ -1,32 +1,28 @@
 package models
 
 import (
-	"go.mongodb.org/mongo-driver/bson"
-	"time"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type BaseModel struct {
-	Id        int
-	CreatedAt *time.Time
-	UpdatedAt *time.Time
-}
-
-type ModelCredential interface {
-	Validate() bool
+	CreatedAt uint
+	UpdatedAt uint
 }
 
 type ModelMetadata interface {
-	GetDocumentName() string
+	CollectionName() string
 }
 
-type BsonMod interface {
-	GenerateBson() bson.D
+type ModelUpdate interface {
+	MakeCondition(filterFields []string) map[string]interface{}
+	MakeUpdated(fields []string) []primitive.E
 }
 
-type ModelCache interface {
-	IsCached() bool
+func NewModel(collectionName string) interface{ ModelMetadata } {
+	switch collectionName {
+	case "order":
+		return &OrderInfo{}
+	default:
+		return nil
+	}
 }
-
-const (
-	DataInvalid string = "Data is invalid"
-)

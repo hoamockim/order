@@ -6,14 +6,15 @@ import (
 )
 
 type QueryOrderService interface {
-	GetOrderDetail(code string) (*dto.OrderData, error)
+	GetDetail(code string) (*dto.OrderData, error)
 }
 
 type CommandOrderService interface {
-	CreateOrder(req *dto.OrderRequest) error
+	Create(req *dto.OrderRequest) error
+	Cancel(req *dto.OrderProcessRequest) error
 }
 
-func (srv *defaultService) CreateOrder(req *dto.OrderRequest) error {
+func (srv *defaultService) Create(req *dto.OrderRequest) error {
 	//main follow
 	orderInfo := models.OrderInfo{
 		Address:    req.AddressCode,
@@ -28,10 +29,10 @@ func (srv *defaultService) CreateOrder(req *dto.OrderRequest) error {
 	return nil
 }
 
-func (srv *defaultService) ProcessOrder(req *dto.OrderProcessRequest) error {
+func (srv *defaultService) Cancel(req *dto.OrderProcessRequest) error {
 	return nil
 }
 
-func (srv *defaultService) GetOrderDetail(code string) (oderData *dto.OrderData, err error) {
+func (srv *defaultService) GetDetail(code string) (oderData *dto.OrderData, err error) {
 	return
 }
